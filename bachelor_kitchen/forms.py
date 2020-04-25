@@ -42,8 +42,8 @@ class RegistrationForm(FlaskForm):
     university=TextAreaField('University', validators=[Regexp('^[#.0-9a-zA-Z\s,-]+$', message="Not a valid university")])
     submit = SubmitField('Sign Up')
 
-    def validate_username(self, userid):
-        user = User.query.filter_by(userid=userid.data).first()
+    def validate_username(self, username):
+        user = User.query.filter_by(username=username.data).first()
         if user:
             raise ValidationError('That userid is taken. Please choose a different one.')
     def validate_email(self, email):

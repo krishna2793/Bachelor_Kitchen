@@ -26,8 +26,8 @@ class User(db.Model,UserMixin):
     zipcode=db.Column(db.String(10))
     profile=db.Column(db.Text, nullable=True)
     photo=db.Column(db.String(20), nullable=True)
-    selfposts=relationship("Posts", back_populates="posteduser")
-    acceptedposts=relationship("Posts", back_populates="acceptedusers")
+    selfposts=db.relationship("Post", backref="author", lazy=True)
+    #acceptedposts=relationship("Post", backref="acceptedusers", lazy=True)
     # otp = db.Column(db.String(6))
     # status = db.Column(db.String(20), nullable=False)
     # loginattempts = db.Column(db.Integer, default=0)
@@ -44,8 +44,8 @@ class Post(db.Model):
     deadline=db.Column(db.DateTime, nullable=False)
     cookingdate=db.Column(db.DateTime, nullable=False)
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.now)
-    posteduser = relationship("User", back_populates="selfposts")
-    acceptedusers=relationship("User", back_populates="acceptedposts")
+    posteduser =db.Column(db.String(30),db.ForeignKey('user.username'), nullable=False)
+    #acceptedusers=db.Column(db.String(30),db.ForeignKey('user.username'), nullable=False)
 
 
 

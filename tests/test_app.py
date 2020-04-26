@@ -3,7 +3,7 @@ import tempfile
 
 import pytest
 import sys
-from ../bachelor_kitchen import app
+from ..bachelor_kitchen import app
 
 
 @pytest.fixture(scope='module')

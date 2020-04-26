@@ -3,8 +3,7 @@ import tempfile
 
 import pytest
 import sys
-sys.path.append('../bachelor_kitchen')
-from bachelor_kitchen import app
+from ../bachelor_kitchen import app
 
 
 @pytest.fixture(scope='module')

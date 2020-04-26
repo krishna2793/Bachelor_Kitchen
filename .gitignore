@@ -1,0 +1,9 @@
+.idea/*
+*~
+venv/*
+_pycache_
+*.pyc
+settings.json
+logs
+.DS_Store
+sbsystem/site.db

@@ -1,0 +1,18 @@
+{% extends "layout.html" %} {% block content %}
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Registered User</th>
+      <th scope="col">Registered Date</th>
+      <th scope="col">Registered Time</th>
+    </tr>
+  </thead>
+  {% for post in posts %}
+  <tr>
+    <td>{{post.registereduser}}</td>
+    <td>{{post.date_posted.date()}}</td>
+    <td>{{post.date_posted.time()}}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock content%}

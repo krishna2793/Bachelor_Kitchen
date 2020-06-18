@@ -1,0 +1,4 @@
+__pycache__
+bachelor_kitchen/site.db
+.DS_Store
+.gitignore

@@ -1,5 +1,5 @@
 from bachelor_kitchen import app
-from bachelor_kitchen.persistance_helper import persistUser, getUser
+from bachelor_kitchen.persistance_helper import persistUser, getUser, createDb
 from flask import render_template, url_for, flash, redirect, request, session, send_from_directory, make_response
 from flask_login import login_user, current_user, logout_user, login_required
 from bachelor_kitchen.forms import RegistrationForm, LoginForm
@@ -10,6 +10,9 @@ from bachelor_kitchen.forms import RegistrationForm, LoginForm
 def home():
     return render_template('layout.html')
 
+@app.route("/init", methods=['GET])
+def init():
+    createDb()
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():

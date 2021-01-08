@@ -10,7 +10,7 @@ from bachelor_kitchen.forms import RegistrationForm, LoginForm
 def home():
     return render_template('layout.html')
 
-@app.route("/init", methods=['GET])
+@app.route("/init", methods=['GET'])
 def init():
     createDb()
 

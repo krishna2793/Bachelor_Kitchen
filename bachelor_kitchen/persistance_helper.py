@@ -24,3 +24,6 @@ def getUser(email, password):
         return user
     else:
         return None
+    
+def createDb():
+    db.create_all()

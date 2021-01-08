@@ -5,6 +5,8 @@ from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationE
 from datetime import datetime, date
 from flask_wtf.file import FileField, FileAllowed
 from bachelor_kitchen.models import User, Post, ReservedPost
+import wtforms.fields.html5
+from wtforms.fields.html5 import TimeField
 
 
 def phone_length_check(form, field):
@@ -37,16 +39,16 @@ class RegistrationForm(FlaskForm):
                                        Regexp('^\d{3}-\d{3}-\d{4}$', message='Phone number is not valid. Enter in xxx-xxx-xxxx format')])
     address = TextAreaField('Address', validators=[Regexp(
         '^[#.0-9a-zA-Z\s,-]+$', message="Not a valid address")])
-    city = TextAreaField('City', validators=[Regexp(
-        '^[#.0-9a-zA-Z\s,-]+$', message="Not a valid city")])
-    zipcode = TextAreaField('Zip Code', validators=[Regexp(
-        '^[#.0-9a-zA-Z\s,-]+$', message="Not a valid zipcode")])
-    state = TextAreaField('state', validators=[Regexp(
-        '^[#.0-9a-zA-Z\s,-]+$', message="Not a valid state")])
+    city = StringField('City', validators=[DataRequired()])
+    zipcode = StringField('Zip Code', validators=[DataRequired(), Length(5), Regexp(
+        '^[#.0-9]+$', message="Not a valid zipcode")])
+    state = StringField('State', validators=[DataRequired(), Regexp(
+        '^[#.a-zA-Z\s,-]+$', message="Not a valid address")])
     dob = DateField('Date of Birth', format='%m/%d/%Y',
                     validators=[DataRequired()], render_kw={"placeholder": "MM/DD/YYYY"})
-    university = TextAreaField('University', validators=[Regexp(
-        '^[#.0-9a-zA-Z\s,-]+$', message="Not a valid university")])
+    university = SelectField('Choose University',
+                             validators=[DataRequired()],
+                             choices=[('id1', 'Arizona State University')])
     submit = SubmitField('Sign Up')
 
     def validate_username(self, username):
@@ -85,10 +87,25 @@ class PostForm(FlaskForm):
     content = TextAreaField('Content', validators=[DataRequired()])
     cost = IntegerField('Cost', validators=[DataRequired()])
     entries = IntegerField('People Count', validators=[DataRequired()])
-    cookingdate = DateField('Date of cooking', format='%m/%d/%Y',
-                            validators=[DataRequired()], render_kw={"placeholder": "MM/DD/YYYY"})
-    deadline = DateField('Deadline', format='%m/%d/%Y',
-                         validators=[DataRequired()], render_kw={"placeholder": "MM/DD/YYYY"})
+    cookingdate = wtforms.fields.html5.DateField('Date of cooking',id='datepick', validators=[DataRequired()])
+    time= TimeField('Cooking Time',id='timepick', validators=[DataRequired()])
+    deadline = wtforms.fields.html5.DateField('Deadline',id='datepick', validators=[DataRequired()])
+    submit = SubmitField('Post')
+
+    def validate_cookingdate(self, cookingdate):
+        if(cookingdate.data < date.today()):
+            raise ValidationError('Cooking Date is not valid!')
+
+    def validate_deadline(self, deadline):
+        if(deadline.data < date.today()):
+            raise ValidationError('Deadline is not valid!')
+
+
+class UpdatePostForm(FlaskForm):
+    content = TextAreaField('Content', validators=[DataRequired()])
+    entries = IntegerField('People Count', validators=[DataRequired()])
+    cookingdate = wtforms.fields.html5.DateField('Date of cooking',id='datepick', validators=[DataRequired()])
+    deadline = wtforms.fields.html5.DateField('Deadline',id='datepick', validators=[DataRequired()])
     submit = SubmitField('Post')
 
     def validate_cookingdate(self, cookingdate):
@@ -133,3 +150,22 @@ class UpdateAccountForm(FlaskForm):
             if phone:
                 raise ValidationError(
                     'That phone number is already registered with us.')
+
+
+class RequestResetForm(FlaskForm):
+    email = StringField('Email',
+                        validators=[DataRequired(), Email()])
+    submit = SubmitField('Request Password Reset')
+
+    def validate_email(self, email):
+        user = User.query.filter_by(email=email.data).first()
+        if user is None:
+            raise ValidationError(
+                'There is no account with that email. You must register first.')
+
+
+class ResetPasswordForm(FlaskForm):
+    password = PasswordField('Password', validators=[DataRequired()])
+    confirm_password = PasswordField('Confirm Password',
+                                     validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField('Reset Password')

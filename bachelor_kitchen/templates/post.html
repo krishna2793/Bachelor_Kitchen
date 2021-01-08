@@ -38,26 +38,21 @@
           Registered Users
         </button>
       </div>
+      {% else %}
+      <div>
+        <button
+          type="button"
+          class="btn btn-success btn-sm m-1"
+          data-toggle="modal"
+          data-target="#reserveModal"
+        >
+          Reserve
+        </button>
+      </div>
       {% endif %}
     </div>
     <h2 class="article-title">{{ post.title }}</h2>
     <p class="article-content">{{ post.content }}</p>
-    <p class="article-content"><b>Registration Deadline</b>: {{ post.deadline.date() }}</p>
-    <p class="article-content"><b>Slots Remaining</b>: {{ post.entries }}</p>
-    {% if current_user != post.author %}
-    <div style="text-align: center;">
-    <h2>Reserve slot: Pay  {{post.cost}}</h2>
-    <form action="{{ url_for('reserve', post_id=post.postid) }}" method="post">
-      <script
-        src="https://checkout.stripe.com/checkout.js"
-        class="stripe-button"
-        data-key="{{ key }}"
-        data-description="post.title"
-        data-amount="post.cost*100"
-        data-locale="auto"
-      ></script>
-    </div>
-    {% endif %}
   </div>
 </article>
 <!-- Modal -->

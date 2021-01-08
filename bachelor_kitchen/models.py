@@ -4,6 +4,7 @@ from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap
 from sqlalchemy.orm import relationship
+import sqlalchemy
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
 
@@ -32,7 +33,10 @@ class User(db.Model, UserMixin):
     state = db.Column(db.String(50))
     zipcode = db.Column(db.String(10))
     profile = db.Column(db.Text, nullable=True)
-    photo = db.Column(db.String(20), nullable=True)
+    image_file = db.Column(db.String(20), nullable=False,
+                           default='default.jpg')
+    reservedposts = db.relationship(
+        "ReservedPost", backref="author1", lazy=True)
     selfposts = db.relationship("Post", backref="author", lazy=True)
     #acceptedposts=relationship("Post", backref="acceptedusers", lazy=True)
     # otp = db.Column(db.String(6))
@@ -41,13 +45,13 @@ class User(db.Model, UserMixin):
     # loginactive = db.Column(db.Boolean, default=True)
 
     def __repr__(self):
-        return f"User('{self.username}', '{self.email}')"
+        return f"User('{self.firstname}', '{self.email}', '{self.image_file}')"
 
 
 class Post(db.Model):
     postid = db.Column(db.Integer, primary_key=True)
-    item = db.Column(db.String(100), nullable=False)
-    description = db.Column(db.Text, nullable=False)
+    title = db.Column(db.String(100), nullable=False)
+    content = db.Column(db.Text, nullable=False)
     cost = db.Column(db.Integer, nullable=False)
     entries = db.Column(db.Integer, nullable=False)
     deadline = db.Column(db.DateTime, nullable=False)
@@ -56,3 +60,24 @@ class Post(db.Model):
     posteduser = db.Column(db.String(30), db.ForeignKey(
         'user.username'), nullable=False)
     #acceptedusers=db.Column(db.String(30),db.ForeignKey('user.username'), nullable=False)
+
+    def __repr__(self):
+        return f"Post('{self.title}', '{self.date_posted}')"
+
+
+class ReservedPost(db.Model):
+    reserveid = db.Column(db.Integer, primary_key=True)
+    originalpostid = db.Column(db.Integer, nullable=False)
+    title = db.Column(db.String(100), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    cost = db.Column(db.Integer, nullable=False)
+    entries = db.Column(db.Integer, nullable=False)
+    deadline = db.Column(db.DateTime, nullable=False)
+    cookingdate = db.Column(db.DateTime, nullable=False)
+    date_posted = db.Column(db.DateTime, nullable=False, default=datetime.now)
+    registereduser = db.Column(db.String(30), db.ForeignKey(
+        'user.username'), nullable=False)
+    #acceptedusers=db.Column(db.String(30),db.ForeignKey('user.username'), nullable=False)
+
+    def __repr__(self):
+        return f"ReservedPost('{self.title}', '{self.date_posted}')"

@@ -15,16 +15,16 @@
         >{{ post.date_posted.strftime('%Y-%m-%d') }}</small
       >
     </div>
-    <h1>
+    <h2>
       <a class="article-title" href="{{ url_for('post', post_id=post.postid) }}"
         >{{ post.title }}</a
       >
-    </h1>
+    </h2>
+    <p class="article-content">{{ post.content }}</p>
     <p class="article-content"><b>Cost</b>: ${{ post.cost }}</p>
-    <p class="article-content"><b>Cooking Date</b>: {{ post.cookingdate.date() }}</p>
-    <p class="article-content"><b>Cooking Time</b>: {{ post.time }}</p>
+    <p class="article-content"><b>Slots Remaining</b>: {{ post.entries }}</p>
     <a href="{{ url_for('directions', post_id=post.postid) }}"
-      ><p style="text-align: center;">Get Directions!</p></a
+      ><p>Get Directions!</p></a
     >
   </div>
 </article>

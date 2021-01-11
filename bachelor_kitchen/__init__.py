@@ -30,7 +30,7 @@ mail = Mail(app)
 
 from bachelor_kitchen import models
 
-db.drop_all()
-db.create_all()
+#db.drop_all()
+#db.create_all()
 
 from bachelor_kitchen import routes

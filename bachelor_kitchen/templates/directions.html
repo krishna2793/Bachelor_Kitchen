@@ -44,35 +44,28 @@
       </select>
     </div>
     <div id="map"></div>
-    <script>
+    <script type='text/javascript'>
       function initMap() {
-        var directionsService = new google.maps.DirectionsService();
-        var directionsRenderer = new google.maps.DirectionsRenderer();
-        var map = new google.maps.Map(document.getElementById("map"), {
-          zoom: 7,
-          center: { lat: 41.85, lng: -87.65 },
+        var map = new Microsoft.Maps.Map(document.getElementById('map'), {
+          /* No need to set credentials if already passed in URL */
+          //center: new Microsoft.Maps.Location(47.606209, -122.332071),
+          //zoom: 12
         });
-        directionsRenderer.setMap(map);
-        directionsService.route(
-          {
-            origin: { query: document.getElementById("start").value },
-            destination: { query: document.getElementById("end").value },
-            travelMode: "DRIVING",
-          },
-          function (response, status) {
-            if (status === "OK") {
-              directionsRenderer.setDirections(response);
-            } else {
-              window.alert("Directions request failed due to " + status);
-            }
-          }
-        );
+        Microsoft.Maps.loadModule('Microsoft.Maps.Directions', function () {
+          var directionsManager = new Microsoft.Maps.Directions.DirectionsManager(map);
+          // Set Route Mode to driving
+          directionsManager.setRequestOptions({ routeMode: Microsoft.Maps.Directions.RouteMode.driving });
+          var waypoint1 = new Microsoft.Maps.Directions.Waypoint({ address: document.getElementById("start").value  });
+          var waypoint2 = new Microsoft.Maps.Directions.Waypoint({ address: document.getElementById("end").value});
+          directionsManager.addWaypoint(waypoint1);
+          directionsManager.addWaypoint(waypoint2);
+          // Set the element in which the itinerary will be rendered
+          //directionsManager.setRenderOptions({ itineraryContainer: document.getElementById('printoutPanel') });
+          directionsManager.calculateDirections();
+        });
+
       }
     </script>
-    <script
-      async
-      defer
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRTaWd243RX2bjqB0OD3R6AIfM3SSRiUI&callback=initMap"
-    ></script>
+    <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?key=AsuaZCtmhQ83yODN0J7e9VWtElgb-SL2fqgxuEAOFoyOMZvCgWv45LmdYO_gzih9&callback=loadMapScenario' async defer></script>
   </body>
 </html>

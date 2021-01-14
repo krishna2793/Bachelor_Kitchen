@@ -30,6 +30,7 @@
       </select>
     </div>
     <div id="map"></div>
+    <div id="printoutPanel"></div>
     <script type='text/javascript'>
       function initMap() {
         var map = new Microsoft.Maps.Map(document.getElementById('map'), {
@@ -49,7 +50,7 @@
           directionsManager.addWaypoint(waypoint1);
           directionsManager.addWaypoint(waypoint2);
           // Set the element in which the itinerary will be rendered
-          //directionsManager.setRenderOptions({ itineraryContainer: document.getElementById('printoutPanel') });
+          directionsManager.setRenderOptions({ itineraryContainer: document.getElementById('printoutPanel') });
           directionsManager.calculateDirections();
         });
 

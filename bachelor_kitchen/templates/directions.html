@@ -1,21 +1,9 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-    <meta charset="utf-8" />
-    <title>Directions Service</title>
+{% extends "layout.html" %} {% block content %}
     <style>
       /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
       #map {
         height: 100%;
-      }
-      /* Optional: Makes the sample page fill the window. */
-      html,
-      body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
       }
       #floating-panel {
         position: absolute;
@@ -31,8 +19,6 @@
         padding-left: 10px;
       }
     </style>
-  </head>
-  <body>
     <div id="floating-panel">
       <b>Start: </b>
       <select id="start">
@@ -70,5 +56,4 @@
       }
     </script>
     <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?key=AsuaZCtmhQ83yODN0J7e9VWtElgb-SL2fqgxuEAOFoyOMZvCgWv45LmdYO_gzih9&callback=initMap' async defer></script>
-  </body>
-</html>
+{% endblock %}

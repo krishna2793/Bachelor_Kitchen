@@ -258,8 +258,8 @@ def view_registered_users(post_id):
 def directions(post_id):
     post = Post.query.get_or_404(post_id)
     user = User.query.filter_by(username=post.author.username).first()
-    source = " ".join([" ".join(current_user.address.splitlines(), current_user.city, current_user.state, current_user.zipcode])
-    destination = " ".join([" ".join(user.address.splitlines(), user.city, user.state, user.zipcode])
+    source = " ".join([" ".join(current_user.address.splitlines()), current_user.city, current_user.state, current_user.zipcode])
+    destination = " ".join([" ".join(user.address.splitlines()), user.city, user.state, user.zipcode])
     return render_template('directions.html', source=source, destination=destination)
 
 

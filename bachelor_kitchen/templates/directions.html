@@ -1,56 +1,101 @@
-{% extends "layout.html" %} {% block content %}
-    <style>
-      /* Always set the map height explicitly to define the size of the div
-       * element that contains the map. */
-      #floating-panel {
-        z-index: 5;
-        background-color: #fff;
-        padding: 5px;
-        border: 1px solid #999;
-        text-align: center;
-        font-family: "Roboto", "sans-serif";
-        line-height: 30px;
-        padding-left: 10px;
-      }
-    </style>
-    <div id="floating-panel">
-      <b>Start: </b>
-      <select id="start">
-        <option value="{{source}}">{{source}}</option>
-      </select>
-      <b>End: </b>
-      <select id="end">
-        <option value="{{destination}}">{{destination}}</option>
-      </select>
-    </div>
-    <div style="height: 500px;">
-        <div id="printoutPanel" style="width: 30%; height: 100%; float:left; overflow: scroll;"></div>
-        <div id="map" style="width: 70%; height: 100%; float:right"> </div>
-    </div>
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
+    {% if title %}
+    <title> {{ title }}</title>
+    {% else %}
+    <title>Bachelor's Kitchen</title>
+    {% endif %}
     <script type='text/javascript'>
-      function initMap() {
-        var map = new Microsoft.Maps.Map(document.getElementById('map'), {
-          /* No need to set credentials if already passed in URL */
-          center: new Microsoft.Maps.Location(47.606209, -122.332071),
-          zoom: 12
-        });
-        Microsoft.Maps.loadModule('Microsoft.Maps.Directions', function () {
-          var directionsManager = new Microsoft.Maps.Directions.DirectionsManager(map);
-          // Set Route Mode to driving
-          directionsManager.setRequestOptions({ routeMode: Microsoft.Maps.Directions.RouteMode.driving });
-          console.log(document.getElementById("start").value);
-          console.log(document.getElementById("end").value);
+        var map;
+        var directionsManager;
 
-          var waypoint1 = new Microsoft.Maps.Directions.Waypoint({ address: document.getElementById("start").value  });
-          var waypoint2 = new Microsoft.Maps.Directions.Waypoint({ address: document.getElementById("end").value });
-          directionsManager.addWaypoint(waypoint1);
-          directionsManager.addWaypoint(waypoint2);
-          // Set the element in which the itinerary will be rendered
-          directionsManager.setRenderOptions({ itineraryContainer: document.getElementById('printoutPanel') });
-          directionsManager.calculateDirections();
-        });
+        function GetMap()
+        {
+            map = new Microsoft.Maps.Map('#myMap', {});
 
-      }
+            //Load the directions module.
+            Microsoft.Maps.loadModule('Microsoft.Maps.Directions', function () {
+                //Create an instance of the directions manager.
+                directionsManager = new Microsoft.Maps.Directions.DirectionsManager(map);
+
+                //Specify where to display the route instructions.
+                directionsManager.setRenderOptions({ itineraryContainer: '#directionsItinerary' });
+
+                //Specify the where to display the input panel
+                directionsManager.showInputPanel('directionsPanel');
+            });
+        }
     </script>
-    <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?key=AsuaZCtmhQ83yODN0J7e9VWtElgb-SL2fqgxuEAOFoyOMZvCgWv45LmdYO_gzih9&callback=initMap' async defer></script>
-{% endblock %}
+    <style>
+        html, body{
+            padding:0;
+            margin:0;
+            height:100%;
+        }
+
+        .directionsContainer{
+            width:380px;
+            height:100%;
+            overflow-y:auto;
+            float:left;
+        }
+
+        #myMap{
+            position:relative;
+            width:calc(100% - 380px);
+            height:100%;
+            float:left;
+        }
+    </style>
+    <script type='text/javascript' src='http://www.bing.com/api/maps/mapcontrol?callback=GetMap&key=AsuaZCtmhQ83yODN0J7e9VWtElgb-SL2fqgxuEAOFoyOMZvCgWv45LmdYO_gzih9' async defer></script>
+</head>
+<body>
+<header class="site-header">
+    <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
+        <div class="container">
+            <a class="navbar-brand mr-4" href="/">Bachelor's Kitchen</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarToggle">
+                <div class="navbar-nav mr-auto">
+                    <a class="nav-item nav-link" href="{{ url_for('home') }}">Home</a>
+                    <a class="nav-item nav-link" href="{{ url_for('reserved_posts', username=current_user.username) }}">My Reserves</a>
+                </div>
+                <!-- Navbar Right Side -->
+                <div class="navbar-nav">
+                    {% if current_user.is_authenticated %}
+                    <a class="nav-item nav-link" href="{{ url_for('new_post') }}">Post Here!</a>
+                    <a class="nav-item nav-link" href="{{ url_for('profile') }}">Profile</a>
+                    <a class="nav-item nav-link" href="{{ url_for('logout') }}">Logout</a>
+                    {% else %}
+                    <a class="nav-item nav-link" href="{{ url_for('login') }}">Login</a>
+                    <a class="nav-item nav-link" href="{{ url_for('register') }}">Register</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+<div class="directionsContainer">
+    <div id="directionsPanel"></div>
+    <div id="directionsItinerary"></div>
+</div>
+<div id="myMap"></div>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -57,21 +57,21 @@
         {% endwith %}
         {% block content %}{% endblock %}
       </div>
-      {% if current_user.is_authenticated %}
-      <div class="col-md-4">
-        <div class="content-section">
-          <h3>Hi, {{current_user.firstname}}</h3>
-          <p class='text-muted'>Welcome to Bachelor's Kitchen!
-            <ul class="list-group">
-              <li class="list-group-item list-group-item-light"><a href="https://my.asu.edu">MY ASU</a></li>
-              <li class="list-group-item list-group-item-light"><a href="https://www.facebook.com/">Facebook</a></li>
-              <li class="list-group-item list-group-item-light"><a href="https://www.google.com/gmail/">Gmail</a></li>
-              <li class="list-group-item list-group-item-light"><a href="https://calendar.google.com/">Calendar</a></li>
-            </ul>
-          </p>
-        </div>
-      </div>
-      {% endif %}
+<!--      {% if current_user.is_authenticated %}-->
+<!--      <div class="col-md-4">-->
+<!--        <div class="content-section">-->
+<!--          <h3>Hi, {{current_user.firstname}}</h3>-->
+<!--          <p class='text-muted'>Welcome to Bachelor's Kitchen!-->
+<!--            <ul class="list-group">-->
+<!--              <li class="list-group-item list-group-item-light"><a href="https://my.asu.edu">MY ASU</a></li>-->
+<!--              <li class="list-group-item list-group-item-light"><a href="https://www.facebook.com/">Facebook</a></li>-->
+<!--              <li class="list-group-item list-group-item-light"><a href="https://www.google.com/gmail/">Gmail</a></li>-->
+<!--              <li class="list-group-item list-group-item-light"><a href="https://calendar.google.com/">Calendar</a></li>-->
+<!--            </ul>-->
+<!--          </p>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      {% endif %}-->
     </div>
   </main>
 

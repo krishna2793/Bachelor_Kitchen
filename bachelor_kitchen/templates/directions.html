@@ -32,7 +32,24 @@
 
                 //Specify the where to display the input panel
                 directionsManager.showInputPanel('directionsPanel');
+
+                GetDirections();
             });
+        }
+        function GetDirections() {
+            //Clear any previously calculated directions.
+            directionsManager.clearAll();
+            directionsManager.clearDisplay();
+
+            //Create waypoints to route between.
+            var start = new Microsoft.Maps.Directions.Waypoint({ address: document.getElementById('fromTbx').value });
+            directionsManager.addWaypoint(start);
+
+            var end = new Microsoft.Maps.Directions.Waypoint({ address: document.getElementById('toTbx').value });
+            directionsManager.addWaypoint(end);
+
+            //Calculate directions.
+            directionsManager.calculateDirections();
         }
     </script>
     <style>
@@ -86,11 +103,20 @@
         </div>
     </nav>
 </header>
-<div class="directionsContainer">
-    <div id="directionsPanel"></div>
-    <div id="directionsItinerary"></div>
-</div>
-<div id="myMap"></div>
+<main role="main" class="container">
+    <div class="row">
+        <div class="directionsContainer">
+            <div id="directionsPanel">
+                <div style="margin-top:10px;">
+                    From: <input id="fromTbx" type="text" value={{source}}/>
+                    To: <input id="toTbx" type="text" value={{destination}}/>
+                </div>
+            </div>
+            <div id="directionsItinerary"></div>
+        </div>
+        <div id="myMap"></div>
+    </div>
+</main>
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->

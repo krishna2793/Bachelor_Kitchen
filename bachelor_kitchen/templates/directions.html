@@ -32,8 +32,6 @@
 
                 //Specify the where to display the input panel
                 directionsManager.showInputPanel('directionsPanel');
-
-                GetDirections();
             });
         }
         function GetDirections() {
@@ -109,7 +107,8 @@
             <div id="directionsPanel">
                 <div style="margin-top:10px;">
                     From: <input id="fromTbx" type="text" value={{source}}/>
-                    To: <input id="toTbx" type="text" value={{destination}}/>
+                    To: <input id="toTbx" type="text" value={{destination}} readonly/>
+                    <input type="button" onclick="GetDirections()" value="Calculate" />
                 </div>
             </div>
             <div id="directionsItinerary"></div>

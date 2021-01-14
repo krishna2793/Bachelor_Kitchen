@@ -3,12 +3,9 @@
       /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
       #map {
-        height: 100%;
+        height: 400px;
       }
       #floating-panel {
-        position: absolute;
-        top: 10px;
-        left: 25%;
         z-index: 5;
         background-color: #fff;
         padding: 5px;
@@ -29,8 +26,14 @@
         <option value="{{destination}}">{{destination}}</option>
       </select>
     </div>
-    <div id="map"></div>
-    <div id="printoutPanel"></div>
+    <div>
+        <div id="printoutPanel" style="width: 20%; float:left">
+            #left content in here
+        </div>
+        <div id="map" style="width: 80%; float:right">
+            #right content in there
+        </div>
+    </div>
     <script type='text/javascript'>
       function initMap() {
         var map = new Microsoft.Maps.Map(document.getElementById('map'), {
